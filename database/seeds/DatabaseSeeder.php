@@ -11,6 +11,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        for ($i = 0; $i < 5; $i++) {
+            $userId = factory(\App\Models\User::class)->create()->id;
+            factory(\App\Models\Blog::class, 5)->create([
+                'user_id' => $userId
+            ]);
+        }
     }
 }

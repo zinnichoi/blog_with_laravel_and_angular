@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,6 +11,24 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+    'middleware' => 'api'
+], function () {
+    Route::group([
+        'prefix' => 'auth'
+    ], function () {
+        Route::post('logout', 'AuthController@logout')->name('logout');
+        Route::post('login', 'AuthController@login')->name('login');
+        Route::post('refresh', 'AuthController@refresh')->name('refresh');
+        Route::post('me', 'AuthController@me')->name('me');
+    });
+    Route::group([
+        'prefix' => 'blogs/'
+    ], function () {
+        Route::get('', 'BlogController@all')->name('blog.all');
+        Route::get('{id}', 'BlogController@show')->name('blog.show');
+        Route::post('', 'BlogController@store')->name('blog.store');
+        Route::put('{id}', 'BlogController@update')->name('blog.update');
+        Route::delete('{id}', 'BlogController@destroy')->name('blog.delete');
+    });
 });
